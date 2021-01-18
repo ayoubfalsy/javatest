@@ -1,25 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
-
-function App() {
+import React from "react"
+import {BASE_URL, Video_URL} from "./GeneralConstants";
+import VideosComposant from "./VideosComponant";
+class App extends React.Component {
+    constructor(props){
+        super(props);
+        this.state={
+            data:null
+        }
+    }
+    componentDidMount() {
+        fetch(BASE_URL+Video_URL)
+            .then(res => res.json())
+            .then(json => this.setState({ data: json }));
+    }
+  render(){
+      const {data}=this.state;
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          List Videos.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+          {
+            data.map((value,key)=> {
+                <VideosComposant video={value} key={key}/>
+            })
+          }
     </div>
   );
+  }
 }
 
 export default App;
